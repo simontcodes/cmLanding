@@ -1,5 +1,4 @@
 import Breadcrumb from "@/components/Common/Breadcrumb";
-import DatePicker from "@/components/Booking/DatePicker";
 import Form from "@/components/Booking/Form";
 
 const BookingPage = () => {
@@ -9,10 +8,9 @@ const BookingPage = () => {
         pageName="Book an appointment with us!"
         description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. In varius eros eget sapien consectetur ultrices. Ut quis dapibus libero."
       />
-      <div className="mx-5 flex flex-row justify-evenly">
-        <DatePicker />
+      <section className="mx-5 flex flex-row justify-evenly">
         <Form />
-      </div>
+      </section>
     </>
   );
 };
