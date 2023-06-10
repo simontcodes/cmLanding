@@ -48,7 +48,16 @@ const Form = () => {
   const fetchAvailableTimes = (date) => {
     // You can make an API call or perform any logic to get available times for the selected date
     // For simplicity, let's assume the available times are an array of strings
-    const times = ["10:00 AM", "11:00 AM", "2:00 PM", "3:00 PM"];
+    const times = [
+      "10:00",
+      "11:00",
+      "12:00",
+      "13:00",
+      "14:00",
+      "15:00",
+      "16:00",
+      "17:00",
+    ];
     setAvailableTimes(times);
   };
 
