@@ -4,6 +4,7 @@ import { useState, ChangeEvent, FormEvent } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import services from "./typeOFserviceData";
+import axios from "axios";
 
 interface FormData {
   firstName: string;
@@ -45,20 +46,17 @@ const Form = () => {
   maxDate.setDate(maxDate.getDate() + 90);
 
   // Function to fetch available times for the selected date
-  const fetchAvailableTimes = (date) => {
+  const fetchAvailableTimes = async (date) => {
     // You can make an API call or perform any logic to get available times for the selected date
-    // For simplicity, let's assume the available times are an array of strings
-    const times = [
-      "10:00",
-      "11:00",
-      "12:00",
-      "13:00",
-      "14:00",
-      "15:00",
-      "16:00",
-      "17:00",
-    ];
-    setAvailableTimes(times);
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/availableTimes/${date}`
+      );
+      const { availableTimes } = response.data;
+      setAvailableTimes(availableTimes);
+    } catch (error) {
+      console.error("Error fetching available times:", error);
+    }
   };
 
   const excludeWeekends = (date) => {
