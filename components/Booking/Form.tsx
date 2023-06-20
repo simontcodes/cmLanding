@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, ChangeEvent, FormEvent } from "react";
+
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import services from "./typeOFserviceData";
@@ -11,6 +12,23 @@ interface FormData {
   lastName: string;
   phoneNumber: string;
   email: string;
+}
+
+interface ResponseBooking {
+  data?: {
+    user: {
+      firstName: string;
+      lastName: string;
+      email: string;
+    };
+    checkoutUrl: string;
+  };
+}
+
+interface ResponseTimes {
+  data: {
+    availableTimes: string[];
+  };
 }
 
 interface FormErrors {
@@ -49,7 +67,7 @@ const Form = () => {
   const fetchAvailableTimes = async (date) => {
     // You can make an API call or perform any logic to get available times for the selected date
     try {
-      const response = await axios.get(
+      const response: ResponseTimes = await axios.get(
         `http://localhost:8080/availableTimes/${date}`
       );
       const { availableTimes } = response.data;
@@ -128,28 +146,34 @@ const Form = () => {
           transactionNumber: "001",
         },
       ];
-      // Submit the form data
-      const response = await fetch("http://localhost:8080/firstappointment", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(fullData),
-      });
+      try {
+        // Submit the form data
+        const response: ResponseBooking = await axios.post(
+          "http://localhost:8080/booking",
+          fullData
+        );
 
-      if (!response.ok) {
-        throw new Error("Failed to submit form data.");
+        console.log(response);
+
+        if (response.data && response.data.checkoutUrl) {
+          // Navigate to the Square payment link
+          window.location.href = response.data.checkoutUrl;
+        } else {
+          throw new Error("Invalid response format.");
+        }
+
+        // Reset the form
+        setFormData({
+          firstName: "",
+          lastName: "",
+          phoneNumber: "",
+          email: "",
+        });
+        setErrors({});
+      } catch (error) {
+        console.error("Failed to submit form data:", error);
+        // Handle the error, display an error message, etc.
       }
-
-      console.log(response);
-      // Reset the form
-      setFormData({
-        firstName: "",
-        lastName: "",
-        phoneNumber: "",
-        email: "",
-      });
-      setErrors({});
     }
   };
 
