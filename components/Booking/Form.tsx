@@ -106,7 +106,7 @@ const Form = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    sessionStorage.setItem("email", formData.email);
     // Validate the form
     const newErrors: FormErrors = {};
     if (!formData.firstName.trim()) {
